@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block title %}Doctor Dashboard | HMS{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <h2>Doctor Dashboard</h2>
+  <small class="text-muted">Welcome, Doctor</small>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Today's Appointments</h5>
+    <p class="text-muted">List of your scheduled appointments for today.</p>
+
+    <!--Appointments table-->
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>Patient</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {# Example:appointments should be provided by the view as a list of
+          dicts/objects #} {% if appointments and appointments|length > 0 %} {%
+          for appt in appointments %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ appt.date }} {{ appt.time }}</td>
+            <td>{{ appt.patient_name }}</td>
+            <td>{{ appt.reason or '-' }}</td>
+            <td>
+              {% if appt.status == 'Booked' %}
+              <span class="badge bg-warning text-dark">Booked</span>
+              {% elif appt.status == 'Completed' %}
+              <span class="badge bg-success">Completed</span>
+              {% elif appt.status == 'Cancelled' %}
+              <span class="badge bg-secondary">Cancelled</span>
+              {% else %}
+              <span class="badge bg-light text-dark">{{ appt.status }}</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <!--Complete form:posts to /doctor/complete_appointment/<id>(you'll implement POST)-->
+              <form
+                action="{{ url_for('complete_appointment') }}"
+                method="post"
+                class="d-inline"
+              >
+                <input
+                  type="hidden"
+                  name="appointment_id"
+                  value="{{ appt.id }}"
+                />
+                <button type="submit" class="btn btn-sm btn-success">
+                  Complete
+                </button>
+              </form>
+
+              <!--View patient history-->
+              <a
+                href="{{ url_for('doctor_view_patient_history') }}?patient_id={{ appt.patient_id }}"
+                class="btn btn-sm btn-outline-primary ms-1"
+                >History</a
+              >
+            </td>
+          </tr>
+          {% endfor %} {% else %}
+          <tr>
+            <td colspan="6" class="text-center text-muted py-4">
+              No appointments found for today.
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--Quick links / actions-->
+<div class="row">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h6>Availability</h6>
+      <p class="mb-2">
+        Update your availability so patients can book only when you're free.
+      </p>
+      <a
+        href="{{ url_for('doctor_availability') }}"
+        class="btn btn-outline-secondary btn-sm"
+        >Manage Availability</a
+      >
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h6>Assigned Patients</h6>
+      <p class="mb-2">
+        Quick access to your assigned patients list and their histories.
+      </p>
+      <a
+        href="{{ url_for('doctor_view_patient_history') }}"
+        class="btn btn-outline-secondary btn-sm"
+        >View Patients</a
+      >
+    </div>
+  </div>
+</div>
+
+{% endblock %}

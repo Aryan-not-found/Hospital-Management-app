@@ -1,0 +1,104 @@
+{% extends "base.html" %} {% block title %}Register | Hospital Management{%
+endblock %} {% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="text-center mb-4">Create Account</h3>
+        <form action="/register" method="post">
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Your full name"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              class="form-control"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Choose a password"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                name="confirm_password"
+                class="form-control"
+                placeholder="Re-type password"
+                required
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Age</label>
+              <input
+                type="number"
+                name="age"
+                class="form-control"
+                min="1"
+                placeholder="Age"
+              />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Gender</label>
+              <select name="gender" class="form-select">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Contact</label>
+              <input
+                type="tel"
+                name="contact"
+                class="form-control"
+                placeholder="Phone Number"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea
+              name="address"
+              class="form-control"
+              rows="2"
+              placeholder="City, State, etc."
+            ></textarea>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success">
+              Create Account
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

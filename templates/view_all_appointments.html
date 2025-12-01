@@ -1,0 +1,68 @@
+{% extends "base.html" %} {% block title %}All Appointments{% endblock %}
+{%block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>All Appointments</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary"
+      >Back</a
+    >
+  </div>
+  {% if appointments %}
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appt in appointments %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+          {{ appt.patient_name or (appt.patient.user.name if appt.patient and
+          appt.patient.user else ('Patient ' ~ appt.patient_id)) }}
+        </td>
+        <td>
+          {{ appt.doctor_name or (appt.doctor.user.name if appt.doctor and
+          appt.doctor.user else '-') }}
+        </td>
+        <td>{{ appt.date.strftime('%Y-%m-%d') if appt.date else '-' }}</td>
+        <td>{{ appt.time.strftime('%H:%M') if appt.time else '-' }}</td>
+        <td>{{ appt.reason or '-' }}</td>
+        <td>{{ appt.status }}</td>
+        <td>
+          <a
+            href="{{ url_for('admin_view_patient_history') }}?patient_id={{ appt.patient_id }}"
+            class="btn btn-sm btn-outline-primary"
+            >Patient History</a
+          >
+          <form
+            method="post"
+            action="{{ url_for('admin_delete_appointment', appointment_id=appt.id) }}"
+            style="display: inline"
+          >
+            <button
+              type="submit"
+              class="btn btn-sm btn-danger"
+              onclick="return confirm('Delete appointment?')"
+            >
+              Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No appointments scheduled.</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %} {% block title %}Manage Doctors{% endblock %} {% block
+content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Manage Doctors</h2>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary"
+      >Back</a
+    >
+  </div>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="mb-0">
+      List of registered doctors. Use "Add Doctor" to register a new profile.
+    </p>
+    <a href="{{ url_for('manage_doctors') }}#add" class="btn btn-primary"
+      >Add Doctor</a
+    >
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Specialization</th>
+          <th>Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for doc in doctors or [] %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>
+            {{ doc.user.name if doc.user is defined else doc.name or '-' }}
+          </td>
+          <td>
+            {{ doc.user.email if doc.user is defined else doc.email or '-' }}
+          </td>
+          <td>{{ doc.specialization or '-' }}</td>
+          <td>{{ doc.contact or '-' }}</td>
+          <td>
+            <form
+              action="{{ url_for('admin_toggle_user_active', user_id=doc.user.id) }}"
+              method="post"
+              style="display: inline"
+            >
+              <button
+                type="submit"
+                class="btn btn-sm {% if doc.user.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
+              >
+                {% if doc.user.is_active %}Deactivate{% else %}Reactivate{%
+                endif %}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center">No doctors found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="my-4" />
+
+  <!--Simple add doctor placeholder-->
+  <div id="add">
+    <h5>Add Doctor (form placeholder)</h5>
+    <p class="text-muted">
+      This is a placeholder UI. Implement a /admin/add_doctor POST route to
+      handle creation.
+    </p>
+    <form
+      action="{{ url_for('manage_doctors') }}"
+      method="post"
+      class="row g-2"
+    >
+      <div class="col-md-4">
+        <input
+          name="name"
+          class="form-control"
+          placeholder="Full name"
+          required
+        />
+      </div>
+      <div class="col-md-3">
+        <input
+          name="email"
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          required
+        />
+      </div>
+      <div class="col-md-3">
+        <input
+          name="specialization"
+          class="form-control"
+          placeholder="Specialization"
+        />
+      </div>
+      <div class="col-md-2 d-grid">
+        <button class="btn btn-success" type="submit">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

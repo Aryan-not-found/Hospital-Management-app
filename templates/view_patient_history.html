@@ -1,0 +1,85 @@
+{% extends "base.html" %} {% block title %}Patient History{% endblock %} {%
+block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Patient History</h2>
+    <a
+      href="{{ url_for('patient_dashboard') }}"
+      class="btn btn-outline-secondary"
+      >Back</a
+    >
+  </div>
+
+  {% if patient %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5 class="card-title">
+        {{ patient.user.name if patient.user else ('Patient ' ~ patient.id) }}
+      </h5>
+      <p class="card-text">
+        Age: {{ patient.age if patient.age else '-' }}, Contact: {{
+        patient.contact if patient.contact else '-'}}, Email: {{
+        patient.user.email if patient.user else '-'}}
+      </p>
+    </div>
+  </div>
+  {% endif %}
+
+  <h4>Appointments</h4>
+  {% if history %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Reason</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for appt in history %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>
+          {{ appt.doctor_name or (appt.doctor.user.name if appt.doctor and
+          appt.doctor.user else '-' ) }}
+        </td>
+        <td>{{ appt.date.strftime('%Y-%m-%d') if appt.date else '-' }}</td>
+        <td>{{ appt.time.strftime('%H:%M') if appt.time else '-' }}</td>
+        <td>{{ appt.reason }}</td>
+        <td>{{ appt.status }}</td>
+        <td>
+          {% if session.get('role') == 'patient' %}
+          <form
+            action="{{ url_for('cancel_appointment', appointment_id=appt.id) }}"
+            method="post"
+            style="display: inline"
+          >
+            <button
+              class="btn btn-sm btn-danger"
+              ()
+              {%
+              if
+              appt.status
+              !="pending"
+              %}disabled{%
+              endif
+              %}
+            >
+              Cancel
+            </button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No history found for this patient.</p>
+  {% endif %}
+</div>
+{% endblock %}

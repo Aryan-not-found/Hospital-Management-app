@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% block title %}Home | Hospital Management{% endblock
+%} {% block content %}
+<div class="py-5 text-center">
+  <div class="container">
+    <h1 class="display-5 fw-bold">Welcome to HMS</h1>
+    <p class="lead mb-4">
+      A Simple Hospital Management System that helps patients book appointments,
+      doctors manage visits, and Administrators maintain hospital data.
+    </p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+      <a href="{{ url_for('register') }}" class="btn btn-success btn-lg"
+        >Register</a
+      >
+    </div>
+  </div>
+</div>
+
+<hr />
+<div class="container my-4">
+  <h3 class="text-center mb-4">Quick Links</h3>
+  <div class="row text-center">
+    <div class="col-md-4 mb-3">
+      <div class="card p-3 shadow-sm">
+        <h5>Admin</h5>
+        <p>Manage doctors, patients and appointments.</p>
+        <a
+          href="{{ url_for('admin_dashboard') }}"
+          class="btn btn-outline-primary btn-sm"
+          >Admin Dashboard</a
+        >
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card p-3 shadow-sm">
+        <h5>Doctor</h5>
+        <p>View your appointments and update patient history.</p>
+        <a
+          href="{{ url_for('doctor_dashboard') }}"
+          class="btn btn-outline-primary btn-sm"
+          >Doctor Dashboard</a
+        >
+      </div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <div class="card p-3 shadow-sm">
+        <h5>Patient</h5>
+        <p>Book appointments and view your medical history.</p>
+        <a
+          href="{{ url_for('patient_dashboard') }}"
+          class="btn btn-outline-primary btn-sm"
+          >Patient Dashboard</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
